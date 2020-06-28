@@ -18,19 +18,20 @@ public class ContactTypeService {
     }
 
     public ContactType getContactType(String contact) {
-        if (isEmail(contact)) {
-            return ContactType.EMAIL;
-        } else if (isPhone(contact)) {
-            return ContactType.PHONE;
-        } else if (isJabber(contact)) {
-            return ContactType.JABBER;
-        } else {
-            return ContactType.UNKNOWN;
+        if (contact != null) {
+            if (isEmail(contact)) {
+                return ContactType.EMAIL;
+            } else if (isPhone(contact)) {
+                return ContactType.PHONE;
+            } else if (isJabber(contact)) {
+                return ContactType.JABBER;
+            }
         }
-
+        return ContactType.UNKNOWN;
     }
 
     private Boolean isEmail(String contact) {
+
         Pattern emailPattern = Pattern.compile(configProperties.getEmailPattern());
         Matcher emailMatcher = emailPattern.matcher(contact);
         return emailMatcher.matches();

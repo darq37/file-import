@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "app")
 public class ConfigProperties {
-    private String emailPattern;
-    private String phonePattern;
-    private String jabberPattern;
+    private String emailPattern = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    private String phonePattern = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{3}$";
+    private String jabberPattern = "^[a-zA-Z]*$";
     private String csvFile;
     private String xmlFile;
 
