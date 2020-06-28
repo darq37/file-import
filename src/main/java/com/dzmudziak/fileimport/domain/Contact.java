@@ -19,12 +19,6 @@ public class Contact {
 
     private String contact;
 
-    public Contact(Customer customer, ContactType type, String contact) {
-        this.customer = customer;
-        this.type = type;
-        this.contact = contact;
-    }
-
     public Contact() {
     }
 

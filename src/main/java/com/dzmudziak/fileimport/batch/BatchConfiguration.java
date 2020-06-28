@@ -1,5 +1,6 @@
 package com.dzmudziak.fileimport.batch;
 
+import com.dzmudziak.fileimport.config.ConfigProperties;
 import com.dzmudziak.fileimport.domain.Customer;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -30,23 +31,25 @@ public class BatchConfiguration {
     private final StepBuilderFactory stepBuilderFactory;
     private final CustomerItemWriter customerItemWriter;
     private final CustomerConverter customerConverter;
+    private final ConfigProperties configProperties;
 
     @Autowired
     public BatchConfiguration(CustomerFieldSetMapper customerFieldSetMapper,
                               JobBuilderFactory jobBuilderFactory,
                               StepBuilderFactory stepBuilderFactory,
-                              CustomerItemWriter customerItemWriter, CustomerConverter customerConverter) {
+                              CustomerItemWriter customerItemWriter, CustomerConverter customerConverter, ConfigProperties configProperties) {
         this.customerFieldSetMapper = customerFieldSetMapper;
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.customerItemWriter = customerItemWriter;
         this.customerConverter = customerConverter;
+        this.configProperties = configProperties;
     }
 
     @Bean
     public FlatFileItemReader<Customer> csvReader() {
         FlatFileItemReader<Customer> reader = new FlatFileItemReader<>();
-        reader.setResource(new ClassPathResource("dane-osoby.txt"));
+        reader.setResource(new ClassPathResource(configProperties.getCsvFile()));
         reader.setEncoding(StandardCharsets.UTF_8.name());
         reader.setLineMapper(new DefaultLineMapper<>() {
             {
@@ -60,7 +63,7 @@ public class BatchConfiguration {
     @Bean
     public StaxEventItemReader<Customer> xmlReader() {
         StaxEventItemReader<Customer> reader = new StaxEventItemReader<>();
-        reader.setResource(new ClassPathResource("dane-osoby.xml"));
+        reader.setResource(new ClassPathResource(configProperties.getXmlFile()));
         reader.setFragmentRootElementName("person");
         reader.setUnmarshaller(tradeMarshaller());
         return reader;
@@ -68,7 +71,7 @@ public class BatchConfiguration {
 
     @Bean
     public XStreamMarshaller tradeMarshaller() {
-        Map<String, Class> aliases = new HashMap<>();
+        Map<String, Class<?>> aliases = new HashMap<>();
         aliases.put("person", Customer.class);
         XStreamMarshaller marshaller = new XStreamMarshaller();
         marshaller.setConverters(customerConverter);
