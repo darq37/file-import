@@ -1,7 +1,6 @@
 package com.dzmudziak.fileimport.batch;
 
 import com.dzmudziak.fileimport.domain.Contact;
-import com.dzmudziak.fileimport.domain.ContactType;
 import com.dzmudziak.fileimport.domain.Customer;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -9,6 +8,8 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import org.springframework.stereotype.Component;
+
+import static com.dzmudziak.fileimport.utils.ContactTypeUtils.getContactType;
 
 @Component
 public class CustomerConverter implements Converter {
@@ -35,7 +36,7 @@ public class CustomerConverter implements Converter {
                 while (reader.hasMoreChildren()) {
                     reader.moveDown();
                     Contact contact = new Contact();
-                    contact.setType(convertToContactType(reader.getNodeName()));
+                    contact.setType(getContactType(reader.getNodeName()));
                     contact.setCustomer(customer);
                     contact.setContact(reader.getValue());
                     customer.getContacts().add(contact);
@@ -50,18 +51,5 @@ public class CustomerConverter implements Converter {
     @Override
     public boolean canConvert(Class aClass) {
         return Customer.class.isAssignableFrom(aClass);
-    }
-
-    private ContactType convertToContactType(String nodeName) {
-        switch (nodeName) {
-            case "phone":
-                return ContactType.PHONE;
-            case "email":
-                return ContactType.EMAIL;
-            case "jabber":
-                return ContactType.JABBER;
-            default:
-                return ContactType.UNKNOWN;
-        }
     }
 }
