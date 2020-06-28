@@ -38,7 +38,11 @@ public class CustomerConverter implements Converter {
             } else if ("surname".equalsIgnoreCase(nodeName)) {
                 customer.setSurname(reader.getValue());
             } else if ("age".equalsIgnoreCase(nodeName)) {
-                customer.setAge(Integer.valueOf(reader.getValue()));
+                try {
+                    customer.setAge(Integer.valueOf(reader.getValue()));
+                } catch (NumberFormatException nfe) {
+                    customer.setAge(null);
+                }
             } else if ("city".equalsIgnoreCase(nodeName)) {
                 customer.setCity(reader.getValue());
             } else if ("contacts".equalsIgnoreCase(reader.getNodeName())) {
