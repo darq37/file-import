@@ -9,6 +9,24 @@ public class ConfigProperties {
     private String emailPattern;
     private String phonePattern;
     private String jabberPattern;
+    private String csvFile;
+    private String xmlFile;
+
+    public String getCsvFile() {
+        return csvFile;
+    }
+
+    public void setCsvFile(String csvFile) {
+        this.csvFile = csvFile;
+    }
+
+    public String getXmlFile() {
+        return xmlFile;
+    }
+
+    public void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
+    }
 
     public void setEmailPattern(String emailPattern) {
         this.emailPattern = emailPattern;
