@@ -33,6 +33,7 @@ public class CustomJobLauncher implements CommandLineRunner {
         Job job = jobFactory.getJob(extension);
         if (job == null) {
             System.out.println("No valid job selected - file extension not recognized.");
+            return;
         }
         jobLauncher.run(job, jobParameters);
     }
