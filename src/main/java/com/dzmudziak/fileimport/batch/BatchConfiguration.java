@@ -68,7 +68,7 @@ public class BatchConfiguration {
 
     @Bean
     public XStreamMarshaller tradeMarshaller() {
-        Map<String, Class> aliases = new HashMap<>();
+        Map<String, Class<?>> aliases = new HashMap<>();
         aliases.put("person", Customer.class);
         XStreamMarshaller marshaller = new XStreamMarshaller();
         marshaller.setConverters(customerConverter);

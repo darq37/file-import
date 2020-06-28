@@ -2,17 +2,26 @@ package com.dzmudziak.fileimport.batch;
 
 import com.dzmudziak.fileimport.domain.Contact;
 import com.dzmudziak.fileimport.domain.Customer;
+import com.dzmudziak.fileimport.service.ContactTypeService;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.dzmudziak.fileimport.utils.ContactTypeUtils.getContactType;
 
 @Component
 public class CustomerConverter implements Converter {
+    private final ContactTypeService contactTypeService;
+
+    @Autowired
+    public CustomerConverter(ContactTypeService contactTypeService) {
+        this.contactTypeService = contactTypeService;
+    }
+
+
     @Override
     public void marshal(Object o, HierarchicalStreamWriter hierarchicalStreamWriter, MarshallingContext marshallingContext) {
         // noop
@@ -36,7 +45,7 @@ public class CustomerConverter implements Converter {
                 while (reader.hasMoreChildren()) {
                     reader.moveDown();
                     Contact contact = new Contact();
-                    contact.setType(getContactType(reader.getNodeName()));
+                    contact.setType(contactTypeService.getContactType(reader.getValue()));
                     contact.setCustomer(customer);
                     contact.setContact(reader.getValue());
                     customer.getContacts().add(contact);
